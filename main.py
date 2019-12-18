@@ -25,7 +25,6 @@ print(dataset.describe())
 # seabornInstance.distplot(dataset['MaxTemp'])
 # plt.show()
 
-
 # X represent the attributes and Y is the label(values are to be predicted)
 
 X = dataset['MinTemp'].values.reshape(-1, 1)

@@ -8,8 +8,9 @@ from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn.feature_selection import mutual_info_regression, mutual_info_classif
 
+
 #Read dataset
-dataset = pd.read_csv('student_train.csv')
+dataset = pd.read_csv('student_trainzscore.csv')
 
 # #data preprocessing: fill all missing value
 # dataset['PoorWeather'] = pd.to_numeric(dataset['PoorWeather']).fillna(0).astype(int)
@@ -50,7 +51,7 @@ for i in range(0, len(indices)):
     if np.abs(importances[i]) > 0.2:
         print(names[i])
 
-X_train = X_train[['UniID', 'MoEdu', 'StudyTime', 'Failures', 'HigherEdu', 'DAlc', 'WAlc']]
+X_train = X_train[['UniID', 'MoEdu', 'StudyTime', 'Failures']]
 
 #second iteration of features selection
 for i in range(0, len(X_train.columns)):
@@ -74,7 +75,7 @@ mi.sort_values(ascending=False)
 mi.sort_values(ascending=False).plot.bar(figsize=(10,4))
 plt.show()
 
-X_train = X_train[['UniID', 'MoEdu', 'StudyTime', 'Failures', 'HigherEdu']]
+X_train = X_train[['UniID', 'MoEdu', 'StudyTime', 'Failures']]
 
 print("#"*80)
 # #training
@@ -85,10 +86,10 @@ print(X_train)
 print(len(y_train))
 regressor.fit(X_train, y_train)
 
-Xs = X[['UniID', 'MoEdu', 'StudyTime', 'Failures', 'HigherEdu']]
+Xs = X[['UniID', 'MoEdu', 'StudyTime', 'Failures']]
 coeff_df = pd.DataFrame(regressor.coef_, Xs.columns, columns=['Coefficient'])
 print(coeff_df)
-X_test = X_test[['UniID', 'MoEdu', 'StudyTime', 'Failures', 'HigherEdu']]
+X_test = X_test[['UniID', 'MoEdu', 'StudyTime', 'Failures']]
 y_pred = regressor.predict(X_test)
 
 df = pd.DataFrame({'Actual': y_test, 'Predicted': y_pred})
@@ -99,12 +100,13 @@ df1.plot(kind='bar', figsize=(10,8))
 print(dataset.describe())
 
 # Evaluate the performance of the algorithm:
+print("Data Set using features selection + remove outliers")
 print('Mean Absolute Error: ', metrics.mean_absolute_error(y_test, y_pred))
 print('Meann Squared Error: ', metrics.mean_squared_error(y_test, y_pred))
 print('Root Mean Squared Error: ', np.sqrt(metrics.mean_squared_error(y_test, y_pred)))
 
 # #Read dataset
-dataset = pd.read_csv('student_train.csv')
+dataset = pd.read_csv('student_trainzscore.csv')
 
 # #data preprocessing: fill all missing value
 # dataset['PoorWeather'] = pd.to_numeric(dataset['PoorWeather']).fillna(0).astype(int)
@@ -120,7 +122,11 @@ regressor = LinearRegression()
 regressor.fit(X_train, y_train)
 
 y_pred = regressor.predict(X_test)
+print("Original Data Set")
 print('Mean Absolute Error: ', metrics.mean_absolute_error(y_test, y_pred))
 print('Meann Squared Error: ', metrics.mean_squared_error(y_test, y_pred))
 print('Root Mean Squared Error: ', np.sqrt(metrics.mean_squared_error(y_test, y_pred)))
+
+
+
 

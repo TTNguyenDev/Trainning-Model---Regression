@@ -9,13 +9,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.feature_selection import mutual_info_regression, mutual_info_classif
 
 
-#Read dataset
-dataset = pd.read_csv('student_trainzscore.csv')
 
-# #data preprocessing: fill all missing value
-# dataset['PoorWeather'] = pd.to_numeric(dataset['PoorWeather']).fillna(0).astype(int)
-# dataset['TSHDSBRSGF'] = pd.to_numeric(dataset['TSHDSBRSGF']).fillna(0).astype(int)
-print(dataset)
+#Read dataset
+dataset = pd.read_csv('student_quantileafterzscore.csv')
+print(dataset.describe())
 
 #predict max temp using all feature from column 1 to 25
 X = dataset.iloc[:,0:17]
@@ -46,12 +43,12 @@ plt.xlabel('Relative Importance')
 plt.show()
 
 # first iteration of features selection
-print("\nmpg > 0.2: ")
+print("\nmpg > 0.18: ")
 for i in range(0, len(indices)):
-    if np.abs(importances[i]) > 0.2:
+    if np.abs(importances[i]) > 0.18:
         print(names[i])
 
-X_train = X_train[['UniID', 'MoEdu', 'StudyTime', 'Failures']]
+X_train = X_train[['UniID', 'Sex', 'Area', 'MoEdu', 'StudyTime']]
 
 #second iteration of features selection
 for i in range(0, len(X_train.columns)):
@@ -63,7 +60,6 @@ for i in range(0, len(X_train.columns)):
             elif corr_1 > 0.75:
                 print(X_train.columns[i], "is highly correlared with", X_train.columns[j])
 
-# X_train = X_train[['MIN', 'MAX', 'MeanTemp']]
 
 # third iteration of features selection
 print(len(X_train), len(y_train))
@@ -75,7 +71,7 @@ mi.sort_values(ascending=False)
 mi.sort_values(ascending=False).plot.bar(figsize=(10,4))
 plt.show()
 
-X_train = X_train[['UniID', 'MoEdu', 'StudyTime', 'Failures']]
+X_train = X_train[['UniID', 'Sex', 'Area', 'MoEdu', 'StudyTime']]
 
 print("#"*80)
 # #training
@@ -86,10 +82,10 @@ print(X_train)
 print(len(y_train))
 regressor.fit(X_train, y_train)
 
-Xs = X[['UniID', 'MoEdu', 'StudyTime', 'Failures']]
+Xs = X[['UniID', 'Sex', 'Area', 'MoEdu', 'StudyTime']]
 coeff_df = pd.DataFrame(regressor.coef_, Xs.columns, columns=['Coefficient'])
 print(coeff_df)
-X_test = X_test[['UniID', 'MoEdu', 'StudyTime', 'Failures']]
+X_test = X_test[['UniID', 'Sex', 'Area', 'MoEdu', 'StudyTime']]
 y_pred = regressor.predict(X_test)
 
 df = pd.DataFrame({'Actual': y_test, 'Predicted': y_pred})
@@ -100,13 +96,14 @@ df1.plot(kind='bar', figsize=(10,8))
 print(dataset.describe())
 
 # Evaluate the performance of the algorithm:
-print("Data Set using features selection + remove outliers")
 print('Mean Absolute Error: ', metrics.mean_absolute_error(y_test, y_pred))
 print('Meann Squared Error: ', metrics.mean_squared_error(y_test, y_pred))
 print('Root Mean Squared Error: ', np.sqrt(metrics.mean_squared_error(y_test, y_pred)))
 
 # #Read dataset
-dataset = pd.read_csv('student_trainzscore.csv')
+dataset = pd.read_csv('student_quantileafterzscore.csv')
+del dataset['Failures']
+del dataset['HigherEdu']
 
 # #data preprocessing: fill all missing value
 # dataset['PoorWeather'] = pd.to_numeric(dataset['PoorWeather']).fillna(0).astype(int)
@@ -114,19 +111,21 @@ dataset = pd.read_csv('student_trainzscore.csv')
 # print(dataset)
 
 #predict max temp using all feature from column 1 to 25
-X = dataset.iloc[:,0:17]
-y = dataset.iloc[:,17].values
+X = dataset.iloc[:,0:15]
+y = dataset.iloc[:,15].values
+
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
 regressor = LinearRegression()
 regressor.fit(X_train, y_train)
 
 y_pred = regressor.predict(X_test)
-print("Original Data Set")
 print('Mean Absolute Error: ', metrics.mean_absolute_error(y_test, y_pred))
 print('Meann Squared Error: ', metrics.mean_squared_error(y_test, y_pred))
 print('Root Mean Squared Error: ', np.sqrt(metrics.mean_squared_error(y_test, y_pred)))
 
+print("$"*80)
 
 
 
+hit

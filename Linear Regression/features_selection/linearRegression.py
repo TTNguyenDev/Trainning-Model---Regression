@@ -12,7 +12,7 @@ from sklearn.feature_selection import mutual_info_regression, mutual_info_classi
 #Read dataset
 dataset = pd.read_csv('student_quantileafterzscore.csv')
 
-#predict max temp using all feature from column 1 to 25
+# drop data set into 5 features after using features selection
 dataset = dataset[['UniID', 'Sex', 'Area', 'MoEdu', 'StudyTime', 'Result']]
 print(dataset)
 
@@ -42,9 +42,8 @@ print('Mean Absolute Error: ', np.mean(MAE))
 print('Meann Squared Error: ', np.mean(MSE))
 print('Root Mean Squared Error: ', np.mean(RMSE))
 
-
 #Build model:
-X = dataset.iloc[:,0:4]
+X = dataset.iloc[:,0:5]
 y = dataset.iloc[:,5].values
 
 regressor = LinearRegression()

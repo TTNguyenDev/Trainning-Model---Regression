@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn import metrics
 
-from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LinearRegression, Ridge, Lasso
 from sklearn.model_selection import train_test_split, KFold
 from sklearn.feature_selection import mutual_info_regression, mutual_info_classif
 
@@ -48,7 +48,8 @@ y = dataset.iloc[:,5].values
 
 regressor = LinearRegression()
 regressor.fit(X, y)
-
-coeff_df = pd.DataFrame(regressor.coef_, X.columns, columns=['Coefficient'])
+coeff_df =  pd.DataFrame(regressor.coef_, X.columns, columns=['Coefficient'])
 print(coeff_df)
+print(regressor.intercept_)
 
+# y = 10.581091720222357 -0.592573*UniID + 0.755488xSex -0.059558xArea + 0.355424xMoEdu + 0.537924xStudy

@@ -84,6 +84,7 @@ print(coeff_df)
 X_test = X_test[['UniID', 'Sex', 'Area', 'MoEdu', 'StudyTime']]
 y_pred = regressor.predict(X_test)
 
+print("XXXX")
 df = pd.DataFrame({'Actual': y_test, 'Predicted': y_pred})
 df1 = df.head(25)
 print(df1)
@@ -111,6 +112,7 @@ regressor = LinearRegression()
 regressor.fit(X_train, y_train)
 
 y_pred = regressor.predict(X_test)
+print(X_test)
 print('Mean Absolute Error: ', metrics.mean_absolute_error(y_test, y_pred))
 print('Meann Squared Error: ', metrics.mean_squared_error(y_test, y_pred))
 print('Root Mean Squared Error: ', np.sqrt(metrics.mean_squared_error(y_test, y_pred)))
